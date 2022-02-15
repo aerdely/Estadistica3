@@ -205,16 +205,21 @@ using Distributions
     Bn(interval::String, obs, g = 0.95)
 
 Nonparametric point and 100g% probability interval estimation for the probability of an `interval` using the observed random sample in a vector `obs` and the bayesian paradigm (g = 0.95 default value if not specified). `interval` is specified a string, where the first and last characters must be an open or closed bracket, that is `]` or `[` and the left and right extremes must be numbers separated by a comma.
+
+Dependencies:
+- internal: `Tn` `EDA`
+- external: `Distributions.jl`
+
 # Example
 ```
 W = Normal(-2, 3)
 cdf(W, 3) - cdf(W, 0) # P(0 < W < 3) 
-wobs = rand(W, 100)
+wobs = rand(W, 1_000)
 Bn("]0,3[", wobs, 0.95)
 ```
 """
 function Bn(interval::String, obs, γ = 0.95)
-    # using: Distributions
+    # using: Distributions.jl
     # Dependencies: Tn, EDA
     n = length(obs)
     tn = Tn(interval, obs)
