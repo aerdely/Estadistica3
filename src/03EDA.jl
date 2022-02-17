@@ -129,7 +129,7 @@ end
 
 
 ## Example 2
-## f(x,y) = |x - 5| + |y + 2| is clearly minimzed ay (x,y) = (5,-2) since f(x,y) ≥ 0
+## f(x,y) = |x - 5| + |y + 2| is clearly minimzed at (x,y) = (5,-2) since f(x,y) ≥ 0
 begin
     f(z) = abs(z[1] - 5) + abs(z[2] + 2)
     sol = EDA(f, [-10, -10], [10, 10])
