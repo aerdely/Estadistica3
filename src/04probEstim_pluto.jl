@@ -14,7 +14,7 @@ md"# Nonparametric probability estimation"
 md"> Statistics III -- Dr. Arturo Erdely"
 
 # ╔═╡ 52770e31-65e7-4d96-a091-04e00a36089a
-md"The random variables $Z_i:=\mathbb{1}_{\{X_i\,\in\,B\}}$ for $i\in\{1,\ldots,n\}$ are i.i.d $\text{Bernoulli}$ with unknown parameter $\theta=\mathbb{P}(X\in B).$ Using a $\text{Uniform}(0,1)$ non-informative prior distribution for $\theta$ the posterior distribution is $\text{Beta}(1+nT_n(B),1+n(1-T_n(B)))$ where $Tn(B)=\frac{1}{n}\sum_{i=1}^n Z_i\,$ y a nonparametric estimation of $\mathbb{P}(X\in B).$ Under a quadratic loss penalization, the bayesian point estimate for $\theta=\mathbb{P}(X\in B)$ is the posterior *expected value* which is the following:
+md"The random variables $Z_i:=\mathbb{1}_{\{X_i\,\in\,B\}}$ for $i\in\{1,\ldots,n\}$ are i.i.d $\text{Bernoulli}$ with unknown parameter $\theta=\mathbb{P}(X\in B).$ Using a $\text{Uniform}(0,1)$ non-informative prior distribution for $\theta$ the posterior distribution is $\text{Beta}(1+nT_n(B),1+n(1-T_n(B)))$ where $Tn(B)=\frac{1}{n}\sum_{i=1}^n Z_i\,$ is a nonparametric estimation of $\mathbb{P}(X\in B).$ Under a quadratic loss penalization, the bayesian point estimate for $\theta=\mathbb{P}(X\in B)$ is the posterior *expected value* which is the following:
 
 $$\theta^* \,=\, \frac{1+nT_n(B)}{2+n}$$"
 
