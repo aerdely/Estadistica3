@@ -171,7 +171,7 @@ md"Let's now simulate $1,000$ observations from $W$ and make like we forget its 
 # ╔═╡ 1eb807e4-974c-43a1-9baa-60f4d5a53634
 begin
 	wobs = rand(W, 1_000)
-	estimP = Bn("]0,3[", wobs)
+	estimP = Bn("]0,3[", wobs, 0.99)
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

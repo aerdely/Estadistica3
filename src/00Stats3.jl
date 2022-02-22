@@ -215,7 +215,7 @@ Dependencies:
 W = Normal(-2, 3)
 cdf(W, 3) - cdf(W, 0) # P(0 < W < 3) 
 wobs = rand(W, 1_000);
-Bn("]0,3[", wobs, 0.95)
+Bn("]0,3[", wobs, 0.99)
 ```
 """
 function Bn(interval::String, obs, γ = 0.95)
