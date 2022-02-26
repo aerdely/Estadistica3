@@ -234,13 +234,51 @@ function Bn(interval::String, obs, γ = 0.95)
     return estimación
 end
 
+# cuantil_puntual
+"""
+    cuantil_puntual(α::Real, obs::Vector{<:Real})
+
+Empirical `α` quantile point estimation using the observed random sample in a vector `obs`.
+
+# Example
+```
+cuantil_puntual(0.97725, randn(100000)) # theoretically it's 2.0 approx
+```
+"""
+function cuantil_puntual(α::Real, xobs::Vector{<:Real})
+    obs = sort(xobs)
+    n = length(obs)
+    obsmin = minimum(obs)
+    obsmax = maximum(obs)
+    orden = (n+1)*α
+    if orden < 1
+        cuantil = obsmin
+        println("Aviso: cuantil fuera de rango muestral, es menor.")
+        return cuantil
+    end
+    if orden > n
+        cuantil = obsmax
+        println("Aviso: cuantil fuera de rango muestral, es mayor.")
+        return cuantil
+    end
+    if orden == round(orden)
+        j = Int(orden)
+        cuantil = obs[j]
+        return cuantil
+    end
+    # interpolar:
+    j = Int(floor(orden))
+    cuantil = (j + 1  - orden)*obs[j] + (orden - j)*obs[j+1]
+    return cuantil
+end
+
 
 ### Table of contents
 
 function Stats3()
     println("Stats3.jl")
     println("=========")
-    println("Main functions: Fn  Tn  Bn")
+    println("Main functions: Fn  Tn  Bn  cuantil_puntual")
     println("Auxiliary: EDA")
     println("Table of contents: Stats3()")
 end

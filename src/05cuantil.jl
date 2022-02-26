@@ -1,7 +1,7 @@
 ### Estimación no paramétrica de cuantiles
 
-function cuantil_puntual(α, obs)
-    sort!(obs)
+function cuantil_puntual(α::Real, xobs::Vector{<:Real})
+    obs = sort(xobs)
     n = length(obs)
     obsmin = minimum(obs)
     obsmax = maximum(obs)
