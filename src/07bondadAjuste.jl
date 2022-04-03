@@ -1,5 +1,15 @@
 ### Comparación de pruebas de bondad de ajuste
 
+# Se simularán muestras a partir de una distribución t-Student con parámetro
+# ν ∈ {1,...,30} y se aplicarán pruebas de bondad de ajuste para la hipótesis 
+# de que las muestras provienen de una distribución Normal(0,1). Como la
+# hipótesis es falsa, las pruebas de bondad de ajuste debieran arrojar
+# p-values bajos, mucho má cercanos a cero que a 1, sin embargo conforme
+# el parámetro ν incrementa de 1 hacia 30 la distribución t-Student(ν)
+# se parece cada vez más a una Normal(0,1) y esto provoca que los p-values
+# se alejen cada vez más de cero. Un prueba es uniformemente mejor que otra
+# si en este caso sus p-values siempre son más bajos que los de la otra.
+
 begin
     using Distributions, Statistics, Plots, DelimitedFiles
     include("00Stats3.jl")
