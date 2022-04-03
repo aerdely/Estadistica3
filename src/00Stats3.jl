@@ -292,7 +292,7 @@ simFo(n) = b * rand(n) # simulates a size n random sample from a Uniform(0,b)
 GoF(xobs, Fo, simFo; prueba = "AD")
 ```
 """
-function GoF(xobs, Fo, simFo; prueba = "AD", numsims = 100_000)
+function GoF(xobs, Fo, simFo; prueba = "AD", numsims = 100_000, msg = true)
     n = length(xobs)
     u(x) = Fo.(sort(x))
     i1 = collect(1:n)
@@ -317,7 +317,9 @@ function GoF(xobs, Fo, simFo; prueba = "AD", numsims = 100_000)
     end
     tobs = T(xobs)
     pvalue = sum(tsim .> tobs) / numsims
-    println("p-valor de la prueba " * autores)
+    if msg == true
+        println("p-valor de la prueba " * autores)
+    end
     return pvalue
 end
 
