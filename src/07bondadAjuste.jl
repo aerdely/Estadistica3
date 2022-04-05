@@ -37,7 +37,7 @@ function tabla(n, tipo::String, m = 10_000, nsprueba = 100)
     for ν ∈ 1:30
         matriz[ν, :] = simulación(ν, n, tipo, m, nsprueba)
     end
-    encabezados = ["ν" "mínimo" "1er cuartl" "mediana" "promedio" "3er cuartil" "máximo"]
+    encabezados = ["v" "minimo" "1er cuartil" "mediana" "promedio" "3er cuartil" "maximo"]
     tablapv = vcat(encabezados, hcat(collect(1:30), matriz))
     return tablapv
 end
