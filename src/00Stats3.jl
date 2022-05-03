@@ -365,8 +365,8 @@ end
 """
     poligonal_cuantiles(u::Vector{<:Real}, xobs::Vector{<:Real}; mínimo = minimum(xobs), máximo = maximum(xobs))
 
-Polygonal approximation of the quantile function of a continuous distribution given vector of values `0<u<1` based
-on an observed random sample given by vector `xobs`. The optional parameter `mínimo` may be set to a value
+Polygonal approximation of the quantile function of a continuous distribution given vector of values `0 < u < 1`
+based on an observed random sample given by vector `xobs`. The optional parameter `mínimo` may be set to a value
 smaller than the sample minimum, and `máximo` to a greater value than the sample maximum, if required.
 
 ## Example
@@ -398,7 +398,7 @@ function poligonal_cuantiles(u::Vector{<:Real}, xobs::Vector{<:Real}; mínimo = 
 end
 
 
-# algoritmo de bisección
+# Algoritmo de bisección
 """
     biseccion(f, a, b; δ = abs((a + b)/2) / 1_000_000, m = 10_000)
 
@@ -434,12 +434,78 @@ function biseccion(f, a, b; δ = abs((a + b)/2) / 1_000_000, m = 10_000)
 end
 
 
+# Bernstein_cuantiles
+"""
+    Bernstein_cuantiles(u::Vector{<:Real}, xobs::Vector{<:Real})
+
+Bernstein polynomials approximation of the quantile function of a continuous distribution given vector of
+values `0 < u < 1` based on an observed random sample given by vector `xobs`. 
+
+## Example
+```
+xobs = randn(10_000)
+u = [0.025, 0.5, 0.975]
+Bernstein_cuantiles(u, xobs)
+```
+"""
+function Bernstein_cuantiles(u::Vector{<:Real}, xobs::Vector{<:Real})
+    n = length(xobs)
+    xord = sort(xobs)
+    xp = (xord[1:(n-1)] .+ xord[2:n]) ./ 2
+    xp = vcat(xord[1], xp, xord[n])
+    function g(z)
+        b = 0.0
+        B = Binomial(n, z)
+        p(x) = pdf(B, x)
+        for k ∈ 0:n
+            b += xp[k+1] * p(k)
+        end
+        return b
+    end
+    m = length(u)
+    cuantiles = zeros(m)
+    for i ∈ 1:m
+        cuantiles[i] = g(u[i])
+    end
+    return cuantiles
+end
+
+# Bernstein
+"""
+    Bernstein(x::Vector{<:Real}, xobs::Vector{<:Real}, ε = 0.000001)
+
+Numerical inverse of Bernstein polynomials approximation for a continuous distribution for given values in a
+vector `x` based on an observed random sample given by vector `xobs`, searching over the open interval `]ε,1-ε[`
+
+## Example
+```
+xobs = randn(10_000)
+x = [-1.96, 0, 1.96]
+Bernstein(x, xobs)
+```
+"""
+function Bernstein(x::Vector{<:Real}, xobs::Vector{<:Real}, ε = 0.000001)
+    n = length(xobs)
+    xord = sort(xobs)
+    xp = (xord[1:(n-1)] .+ xord[2:n]) ./ 2
+    xp = vcat(xord[1], xp, xord[n])
+    g(u) = Bernstein_cuantiles([u], xord)[1] - xdada
+    m = length(x)
+    b = zeros(m)
+    for i ∈ 1:m
+        global xdada = x[i]
+        b[i] = biseccion(g, ε, 1-ε).raíz
+    end
+    return b 
+end
+
+
 ### Table of contents
 
 function Stats3()
     println("Stats3.jl")
     println("=========")
-    println("Main functions: Fn  Tn  Bn  cuantil_puntual  GoF  poligonal  poligonal_cuantiles")
+    println("Main functions: Fn  Tn  Bn  cuantil_puntual  GoF  poligonal  poligonal_cuantiles  Bernstein_cuantiles")
     println("Auxiliary: EDA  biseccion")
     println("Table of contents: Stats3()")
 end
