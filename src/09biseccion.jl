@@ -1,7 +1,7 @@
 ### Algoritmo de bisección par encontrar raíces de funciones continuas
 
 begin
-    using Plots, LaTeXStrings, BenchmarkTools
+    using Plots, BenchmarkTools
     include("00Stats3.jl")
 end
 
@@ -9,7 +9,7 @@ end
 begin
     f(x) = (x - 3) * (x - 1) * (x + 1)
     xx = range(-2, 4, length = 1_000)
-    plot(xx, f.(xx), lw = 2, legend = false, xlabel = L"x", ylabel = L"f(x)")
+    plot(xx, f.(xx), lw = 2, legend = false, xlabel = "x", ylabel = "f(x)")
     hline!([0], color = :orange)
 end
 
@@ -92,4 +92,3 @@ end
 fuerzaBruta2(f, -1.9, 0)
 
 @btime fuerzaBruta2(f, -1.9, 0)
-
