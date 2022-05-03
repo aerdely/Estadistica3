@@ -272,7 +272,7 @@ function cuantil_puntual(α::Real, xobs::Vector{<:Real})
     return cuantil
 end
 
-#GoF
+# GoF
 """
     GoF(xobs, Fo, simFo; prueba = "AD", numsims = 100_000)
 
@@ -323,13 +323,89 @@ function GoF(xobs, Fo, simFo; prueba = "AD", numsims = 100_000, msg = true)
     return pvalue
 end
 
+# Poligonal
+"""
+    poligonal(x::Vector{<:Real}, xobs::Vector{<:Real}; mínimo = minimum(xobs), máximo = maximum(xobs))
+
+Polygonal approximation of a continuous distribution function at a given vector of values `x` based
+on an observed random sample given by vector `xobs`. The optional parameter `mínimo` may be set to a value
+smaller than the sample minimum, and `máximo` to a greater value than the sample maximum, if required.
+
+## Example
+```
+xobs = randn(10_000)
+x = [-1.96, 0, 1.96]
+poligonal(x, xobs)
+```
+"""
+function poligonal(x::Vector{<:Real}, xobs::Vector{<:Real}; mínimo = minimum(xobs), máximo = maximum(xobs))
+    n = length(xobs)
+    xord = sort(xobs)
+    xp = (xord[1:(n-1)] .+ xord[2:n]) ./ 2
+    xp = vcat(mínimo, xp, máximo)
+    function g(z, xp)
+        a = 0.0
+        if z > xp[n+1]
+            a = 1.0
+        elseif z > xp[1]
+            for k ∈ 2:(n+1)
+                a += (xp[k-1] < z ≤ xp[k]) * ((k-1) - (xp[k] - z)/(xp[k] - xp[k-1]))
+            end
+            a /= n
+        end
+        return a
+    end
+    m = length(x)
+    polivalores = zeros(m)
+    for i ∈ 1:m
+        polivalores[i] = g(x[i], xp)
+    end
+    return polivalores 
+end
+
+# poligonal_cuantiles
+"""
+    poligonal_cuantiles(u::Vector{<:Real}, xobs::Vector{<:Real}; mínimo = minimum(xobs), máximo = maximum(xobs))
+
+Polygonal approximation of the quantile function of a continuous distribution given vector of values `0<u<1` based
+on an observed random sample given by vector `xobs`. The optional parameter `mínimo` may be set to a value
+smaller than the sample minimum, and `máximo` to a greater value than the sample maximum, if required.
+
+## Example
+```
+xobs = randn(10_000)
+u = [0.025, 0.5, 0.975]
+poligonal_cuantiles(u, xobs)
+```
+"""
+function poligonal_cuantiles(u::Vector{<:Real}, xobs::Vector{<:Real}; mínimo = minimum(xobs), máximo = maximum(xobs))
+    n = length(xobs)
+    xord = sort(xobs)
+    xp = (xord[1:(n-1)] .+ xord[2:n]) ./ 2
+    xp = vcat(mínimo, xp, máximo)
+    function g(z, xp)
+        if 0 < z < 1
+            k = findmax(n*z .≤ collect(1:n))[2]
+            return xp[k+1] - (xp[k+1] - xp[k])*(k - n*z)
+        else
+            return NaN 
+        end
+    end
+    m = length(u)
+    cuantiles = zeros(m)
+    for i ∈ 1:m
+        cuantiles[i] = g(u[i], xp)
+    end
+    return cuantiles
+end
+
 
 ### Table of contents
 
 function Stats3()
     println("Stats3.jl")
     println("=========")
-    println("Main functions: Fn  Tn  Bn  cuantil_puntual  GoF")
+    println("Main functions: Fn  Tn  Bn  cuantil_puntual  GoF  poligonal  poligonal_cuantiles")
     println("Auxiliary: EDA")
     println("Table of contents: Stats3()")
 end
