@@ -348,10 +348,8 @@ function poligonal(x::Vector{<:Real}, xobs::Vector{<:Real}; mínimo = minimum(xo
         if z > xp[n+1]
             a = 1.0
         elseif z > xp[1]
-            for k ∈ 2:(n+1)
-                a += (xp[k-1] < z ≤ xp[k]) * ((k-1) - (xp[k] - z)/(xp[k] - xp[k-1]))
-            end
-            a /= n
+            k = findmax(z .≤ xp)[2]
+            a = (1/n) * ((k-1) - (xp[k] - z)/(xp[k] - xp[k-1]))
         end
         return a
     end

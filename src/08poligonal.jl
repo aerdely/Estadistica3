@@ -1,9 +1,10 @@
 ### Aproximación poligonal de una función de distribución continua
 
 begin
-    using Distributions, Plots, LaTeXStrings
+    using Distributions, Plots
     include("00Stats3.jl")
 end
+
 
 ## Ejemplo: m.a ~ Gamma(2, 3)
 
@@ -21,7 +22,7 @@ end;
 begin
     yPoligonal = poligonal(x, xobs) # probar parámetros opcionales: mínimo = 0.0, máximo = ...
     plot(x, yFX, label = "Teórica", legend = :right, lw = 4.0)
-    xaxis!(L"x"); yaxis!(L"F(x)"); title!("Función de distribución")
+    xaxis!("x"); yaxis!("F(x)"); title!("Función de distribución")
     scatter!(x, yFn, label = "Empírica", lw = 3.0, color = :green)
     plot!(x, yPoligonal, label = "Poligonal", lw = 2.0, color = :red)
 end
@@ -64,7 +65,7 @@ end;
 begin
     yPoligonal = poligonal_densidad(x, xobs) # probar parámetros opcionales: mínimo = 0.0, máximo = ...
     plot(x, yFX, label = "Teórica", legend = :right, lw = 4.0)
-    xaxis!(L"x"); yaxis!(L"f(x)"); title!("Función de densidad")
+    xaxis!("x"); yaxis!("f(x)"); title!("Función de densidad")
     scatter!(x, yPoligonal, label = "Poligonal", lw = 2.0, color = :red)
 end
 
@@ -77,7 +78,7 @@ begin
     x = collect(range(0.0, quantile(Xmodel, 0.995), length = 1_000))
     yPoligonal = poligonal(x, xobs)
     plot(x, yPoligonal, label = "Poligonal", legend = :right, lw = 4.0, color = :green)
-    xaxis!(L"x"); yaxis!(L"F(x)"); title!("Función de distribución")
+    xaxis!("x"); yaxis!("F(x)"); title!("Función de distribución")
 end
 
 # Aproximación poligonal de cuantiles
