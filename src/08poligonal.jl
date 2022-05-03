@@ -22,7 +22,7 @@ begin
     yPoligonal = poligonal(x, xobs) # probar parámetros opcionales: mínimo = 0.0, máximo = ...
     plot(x, yFX, label = "Teórica", legend = :right, lw = 4.0)
     xaxis!(L"x"); yaxis!(L"F(x)"); title!("Función de distribución")
-    plot!(x, yFn, label = "Empírica", lw = 3.0, color = :green)
+    scatter!(x, yFn, label = "Empírica", lw = 3.0, color = :green)
     plot!(x, yPoligonal, label = "Poligonal", lw = 2.0, color = :red)
 end
 
@@ -65,7 +65,7 @@ begin
     yPoligonal = poligonal_densidad(x, xobs) # probar parámetros opcionales: mínimo = 0.0, máximo = ...
     plot(x, yFX, label = "Teórica", legend = :right, lw = 4.0)
     xaxis!(L"x"); yaxis!(L"f(x)"); title!("Función de densidad")
-    plot!(x, yPoligonal, label = "Poligonal", lw = 2.0, color = :red)
+    scatter!(x, yPoligonal, label = "Poligonal", lw = 2.0, color = :red)
 end
 
 
