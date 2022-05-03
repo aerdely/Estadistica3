@@ -400,13 +400,49 @@ function poligonal_cuantiles(u::Vector{<:Real}, xobs::Vector{<:Real}; mínimo = 
 end
 
 
+# algoritmo de bisección
+"""
+    biseccion(f, a, b; δ = abs((a + b)/2) / 1_000_000, m = 10_000)
+
+`f` una función continua sobre el intervalo cerrado `[a,b]` tal que `f(a)f(b)<0`
+con un error máximo de aproximación `δ` a un valor `c` tal que `f(c)=0` en un
+número máximo de iteraciones `m` (método de bisección)
+
+## Ejemplo
+```
+f(x) = (x - 3) * (x - 1) * (x + 1)
+biseccion(f, -1.9, 0)
+```
+"""
+function biseccion(f, a, b; δ = abs((a + b)/2) / 1_000_000, m = 10_000)
+    iter = 1
+    z = (a + b) / 2
+    while iter ≤ m
+        if f(z) == 0.0 || (b - a)/2 ≤ δ
+            break # criterio de paro
+        elseif f(a) * f(z) > 0
+            a = z
+        else
+            b = z
+        end
+        z = (a + b) / 2
+        iter += 1
+    end
+    iter -= 1
+    if iter == m
+        println("Se alcanzó el número máximo de iteraciones = $m")
+    end
+    return (raíz = z, dif = f(z), numiter = iter, maxiter = m, tol = δ)
+end
+
+
 ### Table of contents
 
 function Stats3()
     println("Stats3.jl")
     println("=========")
     println("Main functions: Fn  Tn  Bn  cuantil_puntual  GoF  poligonal  poligonal_cuantiles")
-    println("Auxiliary: EDA")
+    println("Auxiliary: EDA  biseccion")
     println("Table of contents: Stats3()")
 end
 ;
