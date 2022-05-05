@@ -18,7 +18,10 @@ r1 = biseccion(f, -1.9, 0)
 
 r1.numiter
 
+r1. raíz
+
 f(r1.raíz) # comprobando
+
 
 r2 = biseccion(f, 0.5, 1.4)
 

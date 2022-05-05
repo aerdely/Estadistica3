@@ -130,9 +130,16 @@ end
 
 # Pruebas Anderson-Darling
 
-Fo(x) = pdf(Xmodel, x)
+Fo(x) = cdf(Xmodel, x)
 simFo(n) = rand(Xmodel, n)
 GoF(xobs1, Fo, simFo)
 GoF(xsim1, Fo, simFo)
 GoF(xobs2, Fo, simFo)
 GoF(xsim2, Fo, simFo)
+
+# Pruebas Cramér - von Mises
+
+GoF(xobs1, Fo, simFo, prueba = "CM")
+GoF(xsim1, Fo, simFo, prueba = "CM")
+GoF(xobs2, Fo, simFo, prueba = "CM")
+GoF(xsim2, Fo, simFo, prueba = "CM")
