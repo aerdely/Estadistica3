@@ -439,7 +439,10 @@ end
     Bernstein_cuantiles(u::Vector{<:Real}, xobs::Vector{<:Real})
 
 Bernstein polynomials approximation of the quantile function of a continuous distribution given vector of
-values `0 < u < 1` based on an observed random sample given by vector `xobs`. 
+values `0 < u < 1` based on an observed random sample given by vector `xobs`.
+
+Dependencies:
+- external: `Distributions.jl`
 
 ## Example
 ```
@@ -476,6 +479,10 @@ end
 
 Numerical inverse of Bernstein polynomials approximation for a continuous distribution for given values in a
 vector `x` based on an observed random sample given by vector `xobs`, searching over the open interval `]ε,1-ε[`
+
+Dependencies:
+- internal: `Bernstein_cuantiles`
+- external: `Distributions.jl`
 
 ## Example
 ```
