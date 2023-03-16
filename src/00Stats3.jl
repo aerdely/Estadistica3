@@ -125,12 +125,65 @@ function cuantil(α::Real, xobs::Vector{<:Real})
     return cuantil
 end
 
+
+# GoF
+"""
+    GoF(xobs, Fo, simFo; prueba = "AD", numsims = 100_000)
+
+Goodness of fit test for an observed random sample `xobs` (as a vector),
+a proposed distribution function `Fo` along with a function `simFo` which
+simulates samples from `Fo` with a given size. `prueba` is a string indicating
+`AD` for Anderson-Darling (default), `CM` for Cramér-von Mises, and `KS` for
+Kolmogorov-Smirnov. `numsims` is the number of simulations to aproximate the
+probability distribution of the chosen test statistic (100,000 by default).
+
+## Example
+```
+xobs = rand(100) # random sample from a continuous Uniform(0,1) distribution
+b = 1.1
+Fo(x) = (0 < x < b) * x / b + 1*(x ≥ b) # Uniform(0,b) distribution function
+simFo(n) = b * rand(n) # simulates a size n random sample from a Uniform(0,b)
+GoF(xobs, Fo, simFo; prueba = "AD")
+```
+"""
+function GoF(xobs, Fo, simFo; prueba = "AD", numsims = 100_000, msg = true)
+    n = length(xobs)
+    u(x) = Fo.(sort(x))
+    i1 = collect(1:n)
+    i0 = collect(0:(n-1))
+    KS(x) = max(maximum(i1/n .- u(x)), maximum(u(x) .- i0/n))
+    CM(x) = 1/(12*n) + sum((u(x) .- (2 .* i1 .- 1) ./ (2*n)).^2)
+    AD(x) = -n - (1/n)*sum((2 .* i1 .- 1).*(log.(u(x)) .+ log.(1 .- sort(u(x), rev = true))))
+    T = AD
+    autores = "Anderson - Darling"
+    if prueba == "KS"
+        T = KS
+        autores = "Kolmogorov - Smirnov"
+    end
+    if prueba == "CM"
+        T = CM
+        autores = "Cramér - von Mises"
+    end
+    tsim = zeros(numsims)
+    for j ∈ 1:numsims
+        x = simFo(n)
+        tsim[j] = T(x)
+    end
+    tobs = T(xobs)
+    pvalue = sum(tsim .> tobs) / numsims
+    if msg == true
+        println("p-valor de la prueba " * autores)
+    end
+    return pvalue
+end
+
+
 ### Table of contents
 
 function Stats3()
     println("Stats3.jl")
     println("=========")
-    println("Main functions: Fn  Tn  cuantil")
+    println("Main functions: Fn  Tn  cuantil  GoF")
     println("Table of contents: Stats3()")
 end
 ;
