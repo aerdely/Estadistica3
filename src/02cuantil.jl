@@ -1,37 +1,40 @@
-### Nonparametric quantile estimation
+### Estimación no paramétrica de cuantiles
 
-
-## Dependencies
-
-# Packages 
-
-begin
-    # internal package (does not requiere installation)
-    using Statistics
-    # external packages (require previous installation)
-    using Distributions
+function cuantil_puntual(α::Real, xobs::Vector{<:Real})
+    obs = sort(xobs)
+    n = length(obs)
+    obsmin = minimum(obs)
+    obsmax = maximum(obs)
+    orden = (n+1)*α
+    if orden < 1
+        cuantil = obsmin
+        println("Aviso: cuantil fuera de rango muestral, es menor.")
+        return cuantil
+    end
+    if orden > n
+        cuantil = obsmax
+        println("Aviso: cuantil fuera de rango muestral, es mayor.")
+        return cuantil
+    end
+    if orden == round(orden)
+        j = Int(orden)
+        cuantil = obs[j]
+        return cuantil
+    end
+    # interpolar:
+    j = Int(floor(orden))
+    cuantil = (j + 1  - orden)*obs[j] + (orden - j)*obs[j+1]
+    return cuantil
 end
 
-# cumulative collection of functions for the course
+cuantil_puntual(0.5, [1,2,3,4])
 
-include("00Stats3.jl")
-
-Stats3()
-
-
-## Examples
-
-cuantil(0.5, [1,2,3,4])
-
-# the same as `quantile` from the `Statistics` package:
-quantile([1,2,3,4], 0.5)
-
+using Distributions
 
 α = 0.75
 X = Gamma(2, 3)
-quantile(X, α) # theoretical quantil
+quantile(X, α) # cuantil teórico
 
 n = 10_000
-obs = rand(X, n) # random sample
-cuantil(α, obs)  # point estimation
-quantile(obs, α) # point estimation
+obs = rand(X, n) # muestra aleatoria
+cuantil_puntual(α, obs) # estimación puntual
